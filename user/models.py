@@ -7,4 +7,5 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
         self.first_name = self.first_name.capitalize()
+        self.last_name = self.last_name.capitalize()
         super().save(*args, **kwargs)

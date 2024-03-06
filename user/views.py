@@ -23,6 +23,7 @@ def practices(request):
     }
     return render(request, 'user/practices.html', context)
 
+
 @login_required
 def get_answer(request, answer_id):
     answer = Answer.objects.get(id=answer_id, user=request.user)
@@ -38,12 +39,14 @@ def get_answer(request, answer_id):
         }
         return render(request, 'user/answer.html', context)
 
+
 def Register(request):
     context = {}
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
             phone = form.cleaned_data['phone']
             password = form.cleaned_data['password1']
             try:
