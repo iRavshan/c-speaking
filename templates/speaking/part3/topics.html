@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% block content %}
+<!DOCTYPE html>
+{% load static %}
+<div class="col-lg-6 offset-lg-3 grid-margin stretch-card">
+    <div class="card py-3">
+      <div class="card-body">
+        <h4 class="card-title mx-3">Topics</h4>
+        <p class="card-description mb-4 mx-3">Select a topic whose questions you want to practice</p>
+        <form class="form-inline" action="{% url 'speaking3' %}" method="post">
+          {% csrf_token %}
+          <div class="col-12">
+            <div class="row">
+              <div class="col-lg-8">
+                <select class="form-control w-100 mb-4" name="topic_id">
+                  <option value="-1">Random topic</option>
+                  {% for topic in topics %}
+                  <option value="{{topic.id}}">{{topic.name}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-lg-4">
+                <button type="submit" class="btn btn-primary w-100 mb-2">Start</button>
+              </div>
+            </div>
+          </div>          
+        </form>
+      </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+{% block content %}
+<!DOCTYPE html>
+{% load static %}
+<div class="row" id="practice-panel">
+  <div class="col-md-8 offset-lg-2 grid-margin stretch-card">
+    <div class="card position-relative">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-md-4 mt-3">
+                <div class="main-container center">
+                  <h1 id="timer">00:00</h1>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="ml-xl-4 mt-3 mb-md-3" id="question-container">
+                  <h3 class="font-weight-500 mb-4 text-primary">Part 3</h3>
+                  <div style="display: none;">
+                    <audio id="infoAudio" src="{% static 'audios/part3.mp3' %}" controls></audio>
+                  </div>
+                  <div style="display: none;">
+                    <audio id="signalAudio" src="{% static 'audios/signal.mp3' %}" controls></audio>
+                  </div>
+                  <h4 style="line-height: 1.6;" id="infoText">In this part, I will give you some more questions. There is no time for preparation. Begin speaking after this sound.</h4>
+                  {% for question in questions %}
+                  <div style="display: none;">
+                    <audio id="questionAudio{{forloop.counter}}" name="questionAudio" src="{% static 'audios/questions/'|add:question.audio_file_path %}" controls></audio>
+                  </div>
+                  <h4 class="mb-3 mb-xl-0" style="line-height: 1.6; display: none;" name="question" id="question{{forloop.counter}}"><b>#{{forloop.counter}}.</b> {{question.title}}</h4>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" id="result-panel" style="display: none;">
+  <div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <p class="card-title mb-0">Part 3</p>
+        <div class="table-responsive">
+          <table class="table table-striped table-borderless">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Questions</th>
+                <th>Your answers</th>
+              </tr>  
+            </thead>
+            <tbody>
+              {% for question in questions %}
+              <tr>
+                <td><b>#{{forloop.counter}}</b></td>
+                <td>{{question.title}}</td>
+                <td class="font-weight-medium"><audio name="answer" id="answer{{forloop.counter}}" controls></audio></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <button type="submit" class="btn btn-primary my-4 float-right">Submit</button>
+        <a href="{% url 'home' %}" class="btn btn-light my-4 float-right mx-3" data-bs-toggle="modal" data-bs-target="#closeModal">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% block scripts %}
+<script src="{% static 'js/part3.js' %}"></script>
+{% endblock %}
+{% endblock content %}

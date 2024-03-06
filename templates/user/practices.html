@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% block content %}
+<!DOCTYPE html>
+{% load static %}
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body p-4">
+            <h4 class="card-title">Your practices</h4>
+            <p class="card-description">
+              All speaking practices</code>
+            </p>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Part</th>
+                    <th>Topic</th>
+                    <th>Score</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for answer in answers %}
+                  <tr>
+                    <td>{{ answer.finished_at|date:"d/m/Y" }}</td>
+                    <td>{{ answer.finished_at|time:"H:i" }}</td>
+                    <td>{{ answer.part }}</td>
+                    <td>{{ answer.topic }}</td>
+                    <td>
+                      {% if answer.score %}
+                        <label class="badge badge-success">{{answer.score}}</label>
+                      {% endif %}
+                    </td>
+                    <td><a href="{% url 'answer' answer.id %}">Show answers</a> </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>       
+{% endblock content %}

@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{% block content %}
+<!DOCTYPE html>
+{% load static %}
+<div class="row">
+    <div class="col-md-8 offset-lg-2 grid-margin stretch-card">
+        <div class="col-12">
+            <h4 class="font-weight-bold mb-4">Your score</h4>
+            <div class="card">
+                <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                <h3 class="text-primary fs-30 font-weight-medium mb-4">{{answer.score}}</h3>
+                <p class="font-weight-500">{{feedback.text}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="result-panel">
+    <div class="col-md-8 offset-lg-2 grid-margin stretch-card">
+        <div class="col-12">
+            <h4 class="font-weight-bold mb-4 mt-3">Your answers</h4>
+            <div class="card">
+                <div class="card-body">
+                  <p class="card-title mb-3">Part 1: <span class="mx-2 font-weight-500 text-muted">{{answer.topic}}</span></p>
+                  <div class="table-responsive">
+                    <table class="table table-striped table-borderless">
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Questions</th>
+                          <th>Your answers</th>
+                        </tr>  
+                      </thead>
+                      <tbody>
+                        {% for question in answer.questions %}
+                        <tr>
+                          <td><b>#{{forloop.counter}}</b></td>
+                          <td>{{question.title}}</td>
+                          <td class="font-weight-medium"><audio name="answer" id="answer{{forloop.counter}}" controls></audio></td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div> 
+            </div>
+            <a href="{% url 'practices' %}" class="btn btn-primary float-right mt-4">Back</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

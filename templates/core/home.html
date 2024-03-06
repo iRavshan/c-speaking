@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+{% block content %}
+<!DOCTYPE html>
+{% load static %}
+<div class="row">
+  <div class="col-md-12 col-xl-8 offset-lg-2 grid-margin">
+    <div class="row">
+      <div class="col-12 mb-4 mb-xl-0">
+        <h3 class="font-weight-bold">Welcome {{ user.first_name }}</h3>
+        <h6 class="font-weight-normal mb-0">Improve your skills by more practice</span></h6>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8 offset-lg-2 grid-margin transparent">
+    <div class="row">
+      <div class="col-md-6 mb-4 stretch-card transparent">
+        <div class="card card-tale">
+          <div class="card-body">
+            <p class="fs-30 mb-3 mt-4"><a href="#" class="text-white d-block">Mock Exam</a></p>
+            <p>Including all parts</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4 stretch-card transparent">
+        <div class="card card-dark-blue">
+          <div class="card-body">
+            <p class="fs-30 mb-3 mt-4"><a href="{% url 'speaking1' %}" class="text-white d-block">Part 1</a></p>
+            <p>6 questions</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
+        <div class="card card-light-blue">
+          <div class="card-body">
+            <p class="fs-30 mb-3 mt-4"><a href="{% url 'speaking2' %}" class="text-white d-block">Part 2</a></p>
+            <p>Only one question</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 stretch-card transparent">
+        <div class="card card-light-danger">
+          <div class="card-body">
+            <p class="fs-30 mb-3 mt-4"><a href="{% url 'speaking3' %}" class="text-white d-block">Part 3</a></p>
+            <p>5 questions</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>         
+{% endblock content %}
