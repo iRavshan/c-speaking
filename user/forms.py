@@ -24,7 +24,7 @@ class UserRegistrationForm(UserCreationForm):
             'placeholder': 'Lastname'
         })
         self.fields['username'].widget.attrs.update({
-            'name': 'phone',
+            'name': 'username',
             'id': 'phoneNumber',
             'type': 'text',
             'class': 'form-control',

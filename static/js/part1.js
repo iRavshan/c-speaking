@@ -3,7 +3,6 @@ let startingSeconds = 0;
 let time = startingMinutes * 60 + startingSeconds;
 const countdownEl = document.getElementById('timer');
 const signalAudio = document.getElementById('signalAudio');
-var questionsTitles = document.getElementsByName('questionTitle');
 const infoAudio = document.getElementById('infoAudio');
 const practicePanel = document.getElementById('practice-panel');
 const resultPanel = document.getElementById('result-panel');
@@ -33,14 +32,13 @@ function playQuestion(id){
     if ('speechSynthesis' in window) {
         const synthesis = window.speechSynthesis;
         
-        var textToSpeak = questionsTitles[id].value;
+        var textToSpeak = "What do you think about it?"
     
-        var utterance = new SpeechSynthesisUtterance("Gulshana bu nima qilganing, axir senga shuni aytganmidim?");
+        var utterance = new SpeechSynthesisUtterance(textToSpeak);
     
         synthesis.speak(utterance);
 
         utterance.addEventListener('end', () => {
-            console.log('Speech ended');
             isPreparation = true;
             setTimer(0, 5);
     

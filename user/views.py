@@ -47,12 +47,12 @@ def Register(request):
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
-            phone = form.cleaned_data['phone']
+            username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             try:
                 instance = form.save(commit=True)
                 instance.save()
-                user = authenticate(request, username=phone, password=password)
+                user = authenticate(request, username=username, password=password)
                 if user is not None:
                     login(request, user)
                     return redirect('/')
