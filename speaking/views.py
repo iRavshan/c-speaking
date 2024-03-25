@@ -3,9 +3,11 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
+from user.decorators import user_access
 from .models import Topic, Question, Answer
 
 @login_required
+@user_access
 def Mock(request):
     questions = Question.objects.all()
     context = {
@@ -32,6 +34,7 @@ def Part1(request):
 
 
 @login_required
+@user_access
 def Part2(request):
     question = Question.objects.get(id=9)
     context = {
@@ -41,6 +44,7 @@ def Part2(request):
 
 
 @login_required
+@user_access
 def Part3(request):
     context = {}
 
@@ -59,6 +63,7 @@ def Part3(request):
 
 
 @login_required
+@user_access
 @csrf_exempt
 @require_http_methods(["POST"])
 def save_answers(request):

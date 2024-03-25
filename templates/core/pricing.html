@@ -1,0 +1,18 @@
+{% extends 'empty.html' %}
+{% block content %}
+<!DOCTYPE html>
+{% load static %}
+<div class="row w-100 mx-0">
+  <div class="col-lg-4 mx-auto">
+    <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+      <div class="brand-logo">
+        <img src="{% static 'images/logo.png' %}" alt="logo">
+      </div>   
+      <h6 class="font-weight-light">You have to pay for continue</h6>
+      <div class="mt-3">
+        <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" type="submit">Pay Now</button>
+      </div>  
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -38,14 +38,8 @@ function playQuestion(id){
     
         synthesis.speak(utterance);
 
-        utterance.addEventListener('end', () => {
-            isPreparation = true;
-            setTimer(0, 5);
-    
-            if(id === 0) {
-                timer = setInterval(updateCountdown, 1000)
-            }
-        });
+        isPreparation = true;
+        setTimer(0, 5);
     }
 
     else {
@@ -60,6 +54,7 @@ function playInfo(){
         hideInfo();
         showQuestion(0);
         playQuestion(0);
+        timer = setInterval(updateCountdown, 1000);
     };
 }
 

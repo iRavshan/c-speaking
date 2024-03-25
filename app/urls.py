@@ -8,7 +8,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('speaking/', include('speaking.urls')),
     path('user/', include('user.urls')),
-    path('', views.Home, name='home')
+    path('', views.home, name='home'),
+    path('pricing', views.pricing, name='pricing')
 ]
 
 if settings.DEBUG:
