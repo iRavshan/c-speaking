@@ -27,7 +27,7 @@
                     <h4 style="line-height: 1.6;">In this part, I will ask you a few questions. For each question, you will have thirty seconds to answer. Begin speaking after this sound.</h4>
                   </div>            
                   {% for question in questions %}
-                  <h4 class="mb-3 mb-xl-0" style="line-height: 1.6; display: none;" name="question" id="question{{forloop.counter}}">
+                  <h4 class="mb-3 mb-xl-0" style="line-height: 1.6; display: none;" name="question" id="{{question.id}}">
                     <b>#{{forloop.counter}}.</b> {{question.title}}
                   </h4>
                   {% endfor %}

@@ -28,14 +28,14 @@ def practices(request):
 def get_answer(request, answer_id):
     answer = Answer.objects.get(id=answer_id, user=request.user)
     if answer is not None:
-        feedback = Feedback.objects.get(answer=answer)
+        #feedback = Feedback.objects.get(answer=answer)
         context = {
             'answer': {
                 'score': answer.score,
                 'questions': answer.questions.all(),
                 'topic': (answer.questions.all()[0]).topic.name
             },
-            'feedback': feedback
+            #'feedback': feedback
         }
         return render(request, 'user/answer.html', context)
 

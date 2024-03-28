@@ -1,8 +1,8 @@
 import openpyxl
+import json
 from django.shortcuts import render
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_exempt
 from user.decorators import user_access
 from .models import Topic, Question, Answer
 
@@ -63,16 +63,24 @@ def Part3(request):
 
 
 @login_required
-@user_access
-@csrf_exempt
-@require_http_methods(["POST"])
 def save_answers(request):
-    part = request.POST.get('part')
-    answer = Answer(user=request.user, part=part)
+    if request.method == 'POST':
 
-    if part == '1':
-        questions = Question.objects.filter(part='1')
+        part = request.POST.get('part')
+        question_ids = request.POST.getlist('questions')
+        answers = request.FILES.getlist('answers')
 
+        answer = Answer(user=request.user, part=part)
+        answer.save()
+
+        for question_id in question_ids:
+            question = Question.objects.get(id=question_id)
+            answer.questions.add(question)
+                    
+        return render(request, 'core/home.html')
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+    
 
 def save_questions():
     path = "C://part1.xlsx"

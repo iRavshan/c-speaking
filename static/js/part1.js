@@ -10,13 +10,14 @@ const infoText = document.getElementById('infoText');
 var questions = document.getElementsByName('question');
 var answers = document.getElementsByName('answer');
 let repetitions = 0;
-const timer = 0;
-const totalRepetitions = 6;
+var timer = 0;
+const totalRepetitions = questions.length;
 let isPreparation = true;
 
 let mediaRecorder;
 let audioChunks = [];
 let audioBlobs = [];
+const formData = new FormData();
 
 function setTimer(minutes, seconds){
     startingMinutes = minutes;
@@ -39,6 +40,7 @@ function playQuestion(id){
         synthesis.speak(utterance);
 
         isPreparation = true;
+
         setTimer(0, 5);
     }
 
@@ -121,6 +123,9 @@ async function startRecording() {
         const audioUrl = URL.createObjectURL(audioBlob);
         answers[repetitions-1].src = audioUrl;
         audioBlobs.push(audioBlob);
+
+        formData.append('answers', audioBlob);
+
         audioChunks = [];
     };
 
@@ -132,21 +137,42 @@ function stopRecording() {
 }
 
 async function submit_answers() {
-    const formData = new FormData();
-
-    for(let i = 0; i < audioBlobs.length; i++){
-        formData.append('audio' + i, audioBlob);
-    }
 
     formData.append('part', '1');
 
+    const csrftoken = getCookie('csrftoken');
+
+    questions.forEach(function(question){
+        formData.append('questions', question.id);
+    });
+
     try {
-        const response = await fetch('/save_answers/', {
+        await fetch('/speaking/save_answers/', {
             method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
             body: formData,
+            'Content-type': 'multipart/form-data',
         });
 
     } catch (error) {
         console.error('Error while submitting answers:', error);
     }
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Extract CSRF token
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }

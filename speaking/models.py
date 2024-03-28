@@ -49,7 +49,7 @@ class Answer(models.Model):
         ordering = ['-finished_at']
     
     def __str__(self):
-        return f'{self.user.first_name} - {self.finished_at}'
+        return f'{self.user.first_name} {self.user.last_name} - {self.finished_at}'
 
 
 class Feedback(models.Model):
