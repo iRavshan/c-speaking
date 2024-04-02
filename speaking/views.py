@@ -70,7 +70,8 @@ def save_answers(request):
         part = request.POST.get('part')
         question_ids = request.POST.getlist('questions')
         answers = request.FILES.getlist('answers')
-
+        print(part)
+        print(question_ids)
         attempt = Attempt(user=request.user, part=part)
         attempt.save()
 

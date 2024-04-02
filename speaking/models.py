@@ -1,4 +1,5 @@
 import uuid
+from django.utils import timezone
 from django.db import models
 from user.models import User
 
@@ -36,13 +37,18 @@ class Question(models.Model):
 class Attempt(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     user = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
-    finished_at = models.DateTimeField(auto_created=True, auto_now=True, editable=False)
-    part = models.CharField(max_length=20, choices=PARTS, default='1', null=False)
+    finished_at = models.DateTimeField()
+    part = models.CharField(max_length=20, choices=PARTS, null=False, default='1')
     score = models.PositiveIntegerField(null=True, blank=True)
     is_marked = models.BooleanField(null=False, default=False)
 
     class Meta:
         ordering = ['-finished_at']
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.finished_at = timezone.now()
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name} - {self.finished_at}'
