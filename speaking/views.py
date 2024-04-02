@@ -1,5 +1,6 @@
 import boto3
 from uuid import uuid4
+from datetime import datetime
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.http import JsonResponse
@@ -74,7 +75,7 @@ def save_answers(request):
         print(part)
         print(question_ids)
         
-        attempt = Attempt(user=request.user, part=part)
+        attempt = Attempt(user=request.user, part=part, finished_at=datetime.now())
         attempt.save()
 
         s3 = boto3.client('s3',
