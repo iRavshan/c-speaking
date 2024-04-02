@@ -9,7 +9,7 @@
         <img src="{% static 'images/logo.png' %}" alt="logo">
       </div>
       <h6 class="font-weight-light">Signing up is easy. It only takes a few steps</h6>
-      <form class="pt-3" action="{% url 'register' %}" method="post">
+      <form class="pt-3" method="post" action="{% url 'register' %}">
         {% csrf_token %}
         {% for field in form %}
         <div class="form-group">
