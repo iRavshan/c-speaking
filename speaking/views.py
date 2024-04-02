@@ -1,4 +1,3 @@
-import openpyxl
 import boto3
 from uuid import uuid4
 from django.shortcuts import render, redirect
@@ -94,20 +93,4 @@ def save_answers(request):
     
 def submitted(request):
     return render(request, 'speaking/submitted.html')
-    
-def save_questions():
-    path = "C://part1.xlsx"
-    wb_obj = openpyxl.load_workbook(path)
-    data = wb_obj.active
-
-    for col in range(1, 25):
-        topic = Topic(name=(data.cell(row=1, column=col)).value)
-        topic.save()
-        for row in range(2, 11):
-            cell_obj = data.cell(row=row, column=col)
-            if cell_obj.value is not None:
-                question = Question(title=cell_obj.value, topic=topic)
-                question.save()
-            else:
-                break
 
