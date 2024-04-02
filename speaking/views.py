@@ -1,3 +1,4 @@
+import openpyxl
 import boto3
 from uuid import uuid4
 from django.shortcuts import render, redirect
@@ -90,7 +91,27 @@ def save_answers(request):
 
             qa_pair = QAPair(answer_id=new_id, question=question, attempt=attempt)
             qa_pair.save()
+
+    return redirect('user/practices')
     
 def submitted(request):
     return render(request, 'speaking/submitted.html')
 
+
+def save_questions():
+    print('Questions are being saved')
+    path = "C://part1.xlsx"
+    wb_obj = openpyxl.load_workbook(path)
+    data = wb_obj.active
+
+    for col in range(1, 25):
+        topic = Topic(name=(data.cell(row=1, column=col)).value)
+        topic.save()
+        for row in range(2, 11):
+            cell_obj = data.cell(row=row, column=col)
+            if cell_obj.value is not None:
+                question = Question(title=cell_obj.value, topic=topic)
+                question.save()
+            else:
+                break
+    print('Questions have been saved')
