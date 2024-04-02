@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+{% block content %}
+<!DOCTYPE html>
+{% load static %}
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body p-4">
+            <h4 class="card-title">All attempts</h4>
+            <p class="card-description">
+              All attempts
+            </p>
+            <div class="my-3">
+              <a href="?status=unchecked" class="btn btn-outline-primary btn-icon-text mr-3 px-3">
+                <i class="fa-solid fa-circle-exclamation mr-1"></i>
+                Unchecked
+              </a>
+              <a href="?status=checked" class="btn btn-outline-primary btn-icon-text px-3">
+                <i class="fa-solid fa-circle-check mr-1"></i>
+                Checked
+              </a>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Date & Time</th>
+                    <th>Part</th>
+                    <th>Score</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for attempt in attempts %}
+                  <tr>
+                    <td>{{ attempt.user.first_name }} {{ attempt.user.last_name }}</td>
+                    <td>{{ attempt.finished_at|date:"d-M, Y H:i" }}</td>
+                    <td>{{ attempt.part }}</td>
+                    <td>
+                      {% if attempt.is_marked %}
+                        <label class="badge badge-success">{{attempt.score}}</label>
+                      {% else %}
+                        <label class="badge badge-warning">unchecked</label>
+                      {% endif %}
+                    </td>
+                    <td> 
+                      {% if attempt.is_marked %}
+                        <a href="{% url 'check_attempt' attempt.id %}">More <i class="fa-solid fa-arrow-right-long mx-2"></i></a>
+                      {% else %}
+                        <a href="{% url 'get_attempt' attempt.id %}">More <i class="fa-solid fa-arrow-right-long mx-2"></i></a>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>       
+{% endblock content %}

@@ -34,7 +34,7 @@
                         <label class="badge badge-success">{{answer.score}}</label>
                       {% endif %}
                     </td>
-                    <td><a href="{% url 'answer' answer.id %}">Show answers</a> </td>
+                    <td><a href="{% url 'answer' answer.id %}">Show answers <i class="fa-solid fa-arrow-right-long mx-2"></i></a></td>
                   </tr>
                   {% endfor %}
                 </tbody>

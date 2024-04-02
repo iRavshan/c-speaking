@@ -7,9 +7,9 @@
         <div class="col-12">
             <h4 class="font-weight-bold mb-4">Your score</h4>
             <div class="card">
-                <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                <h3 class="text-primary fs-30 font-weight-medium mb-4">{{answer.score}}</h3>
-                <p class="font-weight-500">{{feedback.text}}</p>
+                <div class="card-body">
+                  <h3 class="text-primary fs-30 font-weight-medium mb-4">{{answer.score}}</h3>
+                  <p class="font-weight-500">{{feedback.text}}</p>
                 </div>
             </div>
         </div>
@@ -32,11 +32,13 @@
                         </tr>  
                       </thead>
                       <tbody>
-                        {% for question in answer.questions %}
+                        {% for qapair in answer.questions %}
                         <tr>
                           <td><b>#{{forloop.counter}}</b></td>
-                          <td>{{question.title}}</td>
-                          <td class="font-weight-medium"><audio name="answer" id="answer{{forloop.counter}}" controls></audio></td>
+                          <td>{{qapair.question.title}}</td>
+                          <td class="font-weight-medium">
+                            <audio name="answer" id="answer{{forloop.counter}}" controls src="https://cefrspeaking-bct-s3.s3.eu-north-1.amazonaws.com/media/attempts/{{qapair.attempt.id}}/{{qapair.answer_id}}.wav"></audio>
+                          </td>
                         </tr>
                         {% endfor %}
                       </tbody>

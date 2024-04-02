@@ -8,3 +8,11 @@ def user_access(view_func):
             return redirect('pricing')  
         return view_func(request, *args, **kwargs)
     return wrapper
+
+
+def teacher_access(view_func):
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_staff:
+            return redirect('pricing')  
+        return view_func(request, *args, **kwargs)
+    return wrapper

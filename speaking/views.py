@@ -1,10 +1,12 @@
 import openpyxl
-import json
-from django.shortcuts import render
+import boto3
+from uuid import uuid4
+from django.shortcuts import render, redirect
+from django.conf import settings
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from user.decorators import user_access
-from .models import Topic, Question, Answer
+from .models import Topic, Question, Attempt, QAPair
 
 @login_required
 @user_access
@@ -70,18 +72,29 @@ def save_answers(request):
         question_ids = request.POST.getlist('questions')
         answers = request.FILES.getlist('answers')
 
-        answer = Answer(user=request.user, part=part)
-        answer.save()
+        attempt = Attempt(user=request.user, part=part)
+        attempt.save()
 
-        for question_id in question_ids:
+        s3 = boto3.client('s3',
+                          aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                          aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                          region_name=settings.AWS_S3_REGION_NAME)
+
+        for i, question_id in enumerate(question_ids):
             question = Question.objects.get(id=question_id)
-            answer.questions.add(question)
-                    
-        return render(request, 'core/home.html')
-    else:
-        return JsonResponse({'error': 'Invalid request method'}, status=400)
-    
 
+            new_id = uuid4()
+            file_name = f"{new_id}.wav"
+            s3_key = f"media/attempts/{attempt.id}/{file_name}"
+
+            s3.upload_fileobj(answers[i], settings.AWS_STORAGE_BUCKET_NAME, s3_key)
+
+            qa_pair = QAPair(answer_id=new_id, question=question, attempt=attempt)
+            qa_pair.save()
+    
+def submitted(request):
+    return render(request, 'speaking/submitted.html')
+    
 def save_questions():
     path = "C://part1.xlsx"
     wb_obj = openpyxl.load_workbook(path)

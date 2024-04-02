@@ -3,19 +3,21 @@ from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import UserRegistrationForm
-from speaking.models import Answer, Topic, Feedback
+from .decorators import teacher_access
+from speaking.models import Attempt, Topic, Feedback, QAPair
 
 @login_required
 def practices(request):
     response_answers = []
-    answers = Answer.objects.filter(user=request.user)
-    for answer in answers:
-        topic = (answer.questions.all()[0]).topic
+    attempts = Attempt.objects.filter(user=request.user)
+    for attempt in attempts:
+        qa_pair = QAPair.objects.filter(attempt=attempt).first()
+        topic = qa_pair.question.topic
         response_answers.append({
-            'id': answer.id,
-            'finished_at': answer.finished_at,
-            'part': answer.part,
-            'score': answer.score,
+            'id': attempt.id,
+            'finished_at': attempt.finished_at,
+            'part': attempt.part,
+            'score': attempt.score,
             'topic': topic.name,
         })
     context = {
@@ -26,19 +28,103 @@ def practices(request):
 
 @login_required
 def get_answer(request, answer_id):
-    answer = Answer.objects.get(id=answer_id, user=request.user)
-    if answer is not None:
-        #feedback = Feedback.objects.get(answer=answer)
+    attempt = Attempt.objects.get(id=answer_id, user=request.user)
+    if attempt is not None:
+        qa_pairs = QAPair.objects.filter(attempt=attempt.id)
         context = {
             'answer': {
-                'score': answer.score,
-                'questions': answer.questions.all(),
-                'topic': (answer.questions.all()[0]).topic.name
+                'score': attempt.score,
+                'questions': qa_pairs,
+                'topic': qa_pairs.first().question.topic.name
             },
-            #'feedback': feedback
         }
+        if attempt.is_marked:
+            feedback = Feedback.objects.get(attempt=attempt)
+            context['feedback'] = feedback
         return render(request, 'user/answer.html', context)
 
+
+@login_required
+@teacher_access
+def attempts(request):
+    status = request.GET.get('status', 'unchecked')
+    if status == 'checked':
+        attempts = Attempt.objects.filter(is_marked=True)
+    else:
+        attempts = Attempt.objects.filter(is_marked=False)
+    context = {
+        'attempts': attempts
+    }
+    return render(request, 'user/attempts.html', context)
+
+
+@login_required
+@teacher_access
+def check_attempt(request, attempt_id):
+    attempt = Attempt.objects.get(id=attempt_id)
+    
+    if request.method == 'POST':
+        score = request.POST.get('score')
+        feedback_text = request.POST.get('feedback')
+        feedback = Feedback(attempt=attempt, text=feedback_text)
+        feedback.save()
+        attempt.score = score
+        attempt.is_marked = True
+        attempt.save()
+
+        return redirect('attempts')
+
+    else:
+        if attempt is not None:
+            qa_pairs = QAPair.objects.filter(attempt=attempt)
+            context = {
+                'attempt': {
+                    'id': attempt.id,
+                    'user': attempt.user,
+                    'part': attempt.part,
+                    'score': attempt.score,
+                    'qa_pairs': qa_pairs,
+                    'topic': qa_pairs.first().question.topic.name
+                }
+            }
+        return render(request, 'user/check_attempt.html', context)
+    
+
+@login_required
+@teacher_access
+def get_attempt(request, attempt_id):
+    attempt = Attempt.objects.get(id=attempt_id)
+
+    if request.method == 'POST':
+        score = request.POST.get('score')
+        feedback_text = request.POST.get('feedback')
+
+        Feedback.objects.filter(attempt=attempt).delete()
+
+        attempt.score = score
+        attempt.save()
+
+        feedback = Feedback(attempt=attempt, text=feedback_text)
+        feedback.save()
+
+        return redirect('attempts')
+
+    else:
+        if attempt is not None:
+            qa_pairs = QAPair.objects.filter(attempt=attempt)
+            context = {
+                'attempt': {
+                    'id': attempt.id,
+                    'user': attempt.user,
+                    'part': attempt.part,
+                    'score': attempt.score,
+                    'qa_pairs': qa_pairs,
+                    'topic': qa_pairs.first().question.topic.name
+                }
+            }
+        return render(request, 'user/check_attempt.html', context)
+
+    
 
 def Register(request):
     context = {}

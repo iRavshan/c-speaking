@@ -7,4 +7,5 @@ urlpatterns = [
     path('part2/', views.Part2, name='speaking2'),
     path('part3/', views.Part3, name='speaking3'),
     path('save_answers/', views.save_answers, name='save_answers'),
+    path('submitted/', views.submitted, name='submitted'),
 ]

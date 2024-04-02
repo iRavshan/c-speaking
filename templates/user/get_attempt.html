@@ -1,0 +1,67 @@
+{% extends 'layout.html' %}
+{% block content %}
+<!DOCTYPE html>
+{% load static %}
+<div class="row" id="result-panel">
+    <div class="col-md-8 offset-lg-2 grid-margin stretch-card">
+        <div class="col-12">
+            <h4 class="font-weight-bold mb-4 mt-3">{{attempt.user.first_name}} {{attempt.user.last_name}}</h4>
+            <div class="card">
+                <div class="card-body">
+                  <p class="card-title mb-3">Part 1: <span class="mx-2 font-weight-500 text-muted">{{attempt.topic}}</span></p>
+                  <div class="table-responsive">
+                    <table class="table table-striped table-borderless">
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Questions</th>
+                          <th>Answers</th>
+                        </tr>  
+                      </thead>
+                      <tbody>
+                        {% for qapair in attempt.qa_pairs %}
+                        <tr>
+                          <td><b>#{{forloop.counter}}</b></td>
+                          <td>{{qapair.question.title}}</td>
+                          <td class="font-weight-medium">
+                            <audio name="answer" id="answer{{forloop.counter}}" controls src="https://cefrspeaking-bct-s3.s3.eu-north-1.amazonaws.com/media/attempts/{{qapair.attempt.id}}/{{qapair.answer_id}}.wav"></audio>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+  <div class="col-md-8 offset-lg-2 grid-margin stretch-card">
+      <div class="col-12">
+          <div class="card">
+              <div class="card-body">
+                <form class="forms-sample" action="{% url 'get_attempt' attempt.id %}" method="post">
+                  {% csrf_token %}
+                  <div class="form-group row">
+                    <label for="score" class="col-sm-3 col-form-label"><b>Score</b></label>
+                    <div class="col-sm-12">
+                      <input type="number" class="form-control" id="score" name="score" required min="0" max="75" placeholder="0-75"/>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="feedback" class="col-sm-3 col-form-label"><b>Give feedback</b></label>
+                    <div class="col-sm-12">
+                      <textarea type="text" class="form-control" id="feedback" name="feedback" required rows="6" placeholder="Write it here"></textarea>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-success float-right mt-4">Submit</button>
+                  <a href="{% url 'attempts' %}" class="btn btn-light float-right mt-4 mx-3">Back</a>
+                </form>
+              </div>
+          </div>
+          
+      </div>
+  </div>
+</div>
+{% endblock content %}

@@ -4,13 +4,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Speaking practice</title>
+  <title>CEFR Speaking</title>
   
   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon/favicon-16x16.png' %}">
   <link rel="manifest" href="{% static 'images/favicon/site.webmanifest' %}">
-
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="{% static 'vendors/feather/feather.css' %}">
   <link rel="stylesheet" href="{% static 'vendors/ti-icons/css/themify-icons.css' %}">
   <link rel="stylesheet" href="{% static 'vendors/css/vendor.bundle.base.css' %}">
@@ -29,39 +30,23 @@
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item dropdown show">
-            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown" aria-expanded="true">
-              <i class="icon-mail"></i>
-              <span class="count mx-1 mt-1"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-              <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-info">
-                    <i class="ti-comment-alt mx-0"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject font-weight-normal">New message</h6>
-                  <p class="font-weight-light small-text mb-0 text-muted">
-                    2 days ago
-                  </p>
-                </div>
-              </a>
-            </div>
-          </li>
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
               <img src="{% static '/images/user.png' %}" alt="profile"/>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              {% if user.is_staff %}
+              <a class="dropdown-item" href="{% url 'attempts' %}">
+                <i class="fa-solid fa-chalkboard-user text-primary"></i>
+                Tekshirish
+              </a>
+              {% endif %}
               <a class="dropdown-item" href="{% url 'practices' %}">
-                <i class="ti-bookmark-alt text-primary mb-1"></i>
+                <i class="fa-solid fa-rectangle-list text-primary"></i>
                 My practices
               </a>
               <a class="dropdown-item" href="{% url 'logout' %}">
-                <i class="ti-power-off text-primary"></i>
+                <i class="fa-solid fa-right-from-bracket text-primary"></i>
                 Logout
               </a>
             </div>

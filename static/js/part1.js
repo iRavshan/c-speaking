@@ -31,17 +31,23 @@ function playSignal(){
 
 function playQuestion(id){
     if ('speechSynthesis' in window) {
+
         const synthesis = window.speechSynthesis;
         
-        var textToSpeak = "What do you think about it?"
+        var textToSpeak = questions[id].innerText;
     
         var utterance = new SpeechSynthesisUtterance(textToSpeak);
-    
+
         synthesis.speak(utterance);
 
-        isPreparation = true;
+        utterance.onend = function() {
+            isPreparation = true;
+            setTimer(0, 5);
 
-        setTimer(0, 5);
+            if (id === 0){
+                timer = setInterval(updateCountdown, 1000);
+            }
+        };
     }
 
     else {
@@ -56,7 +62,6 @@ function playInfo(){
         hideInfo();
         showQuestion(0);
         playQuestion(0);
-        timer = setInterval(updateCountdown, 1000);
     };
 }
 
@@ -81,7 +86,7 @@ function updateCountdown() {
     seconds = seconds < 10 ? '0' + seconds: seconds;
     countdownEl.innerHTML = `${minutes}:${seconds}`;
 
-    if (time == 0){
+    if (time === 0) {
         if(totalRepetitions === repetitions){
             clearInterval(timer);
             stopRecording();
@@ -102,7 +107,7 @@ function updateCountdown() {
                 playQuestion(repetitions);
             }
     }
-    else{
+    else {
         time--;        
     }
 }
