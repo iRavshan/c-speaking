@@ -95,7 +95,7 @@ def save_answers(request):
             qa_pair = QAPair(answer_id=new_id, question=question, attempt=attempt)
             qa_pair.save()
 
-    return render(request, 'speaking/submitted.html')
+    return JsonResponse({'accepted': 'true'})
     
 def submitted(request):
     return render(request, 'speaking/submitted.html')

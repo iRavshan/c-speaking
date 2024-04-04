@@ -36,18 +36,17 @@ function playQuestion(id){
         
         var textToSpeak = questions[id].innerText;
     
-        var utterance = new SpeechSynthesisUtterance(textToSpeak);
+        //var utterance = new SpeechSynthesisUtterance(textToSpeak);
 
-        synthesis.speak(utterance);
+        //synthesis.speak(utterance);
 
-        utterance.onend = function() {
-            isPreparation = true;
-            setTimer(0, 5);
+        isPreparation = true;
 
-            if (id === 0){
-                timer = setInterval(updateCountdown, 1000);
-            }
-        };
+        setTimer(0, 5);
+
+        if (id === 0){
+            timer = setInterval(updateCountdown, 1000);
+        }
     }
 
     else {
@@ -160,6 +159,8 @@ async function submit_answers() {
             body: formData,
             'Content-type': 'multipart/form-data',
         });
+
+        window.open('/speaking/submitted/');
 
     } catch (error) {
         console.error('Error while submitting answers:', error);
