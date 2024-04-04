@@ -151,6 +151,9 @@ async function submit_answers() {
         formData.append('questions', question.id);
     });
 
+    submitButton.innerHTML="Submitting ...";
+    submitButton.setAttribute("disabled", "");
+
     try {
         await fetch('/speaking/save_answers/', {
             method: 'POST',
@@ -162,8 +165,6 @@ async function submit_answers() {
         });
 
         window.location.href = "/speaking/submitted/";
-        submitButton.innerHTML="Submitting ...";
-        submitButton.setAttribute("disabled", "");
 
     } catch (error) {
         console.error('Error while submitting answers:', error);
