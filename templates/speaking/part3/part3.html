@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 {% load static %}
 <div class="row" id="practice-panel">
-  <div class="col-md-8 offset-lg-2 grid-margin stretch-card">
+  <div class="col-md-12 col-lg-8 offset-lg-2 grid-margin stretch-card">
     <div class="card position-relative">
       <div class="card-body">
         <div class="row">
@@ -22,13 +22,14 @@
                   </div>
                   <div style="display: none;">
                     <audio id="signalAudio" src="{% static 'audios/signal.mp3' %}" controls></audio>
-                  </div>
-                  <h4 style="line-height: 1.6;" id="infoText">In this part, I will give you some more questions. There is no time for preparation. Begin speaking after this sound.</h4>
+                  </div>      
+                  <div id="infoText">
+                    <h4 style="line-height: 1.6;">In this part, I will give you some more questions. There is no time for preparation. Begin speaking after this sound.</h4>
+                  </div>            
                   {% for question in questions %}
-                  <div style="display: none;">
-                    <audio id="questionAudio{{forloop.counter}}" name="questionAudio" src="{% static 'audios/questions/'|add:question.audio_file_path %}" controls></audio>
-                  </div>
-                  <h4 class="mb-3 mb-xl-0" style="line-height: 1.6; display: none;" name="question" id="question{{forloop.counter}}"><b>#{{forloop.counter}}.</b> {{question.title}}</h4>
+                  <h4 class="mb-3 mb-xl-0" style="line-height: 1.6; display: none;" name="question" id="{{question.id}}">
+                    <b>#{{forloop.counter}}.</b> {{question.title}}
+                  </h4>
                   {% endfor %}
                 </div>
               </div>
@@ -64,9 +65,9 @@
             </tbody>
           </table>
         </div>
-        <button type="submit" class="btn btn-primary my-4 float-right">Submit</button>
+        <button class="btn btn-primary my-4 float-right" id="submitButton" onclick="submit_answers()">Submit</button>
         <a href="{% url 'home' %}" class="btn btn-light my-4 float-right mx-3" data-bs-toggle="modal" data-bs-target="#closeModal">Cancel</a>
-      </div>
+      </div> 
     </div>
   </div>
 </div>

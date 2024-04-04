@@ -6,14 +6,18 @@
   <div class="col-md-12 col-xl-8 offset-lg-2 grid-margin">
     <div class="row">
       <div class="col-12 mb-4 mb-xl-0">
+        {% if user.is_authenticated %}
         <h3 class="font-weight-bold">Welcome {{ user.first_name }}</h3>
+        {% else %}
+        <h3 class="font-weight-bold">Welcome Guest</h3>
+        {% endif %}
         <h6 class="font-weight-normal mb-0">Enhance your skills by more practice</span></h6>
       </div>
     </div>
   </div>
 </div>
 <div class="row">
-  <div class="col-md-8 offset-lg-2 grid-margin transparent">
+  <div class="col-md-12 col-lg-8 offset-lg-2 grid-margin transparent">
     <div class="row">
       <div class="col-md-6 mb-4 stretch-card transparent">
         <div class="card card-tale">
@@ -41,7 +45,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6 stretch-card transparent">
+      <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
         <div class="card card-light-danger">
           <div class="card-body">
             <p class="fs-30 mb-3 mt-4"><a href="{% url 'speaking3' %}" class="text-white d-block">Part 3</a></p>

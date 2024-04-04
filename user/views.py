@@ -35,7 +35,8 @@ def get_answer(request, answer_id):
             'answer': {
                 'score': attempt.score,
                 'questions': qa_pairs,
-                'topic': qa_pairs.first().question.topic.name
+                'topic': qa_pairs.first().question.topic.name,
+                'part': qa_pairs.first().question.part
             },
         }
         if attempt.is_marked:

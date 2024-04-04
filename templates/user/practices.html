@@ -14,8 +14,7 @@
               <table class="table table-striped">
                 <thead>
                   <tr>
-                    <th>Date</th>
-                    <th>Time</th>
+                    <th>Date & Time</th>
                     <th>Part</th>
                     <th>Topic</th>
                     <th>Score</th>
@@ -25,8 +24,7 @@
                 <tbody>
                   {% for answer in answers %}
                   <tr>
-                    <td>{{ answer.finished_at|date:"d/m/Y" }}</td>
-                    <td>{{ answer.finished_at|time:"H:i" }}</td>
+                    <td>{{ answer.finished_at|date:"d-M, Y H:i" }}</td>
                     <td>{{ answer.part }}</td>
                     <td>{{ answer.topic }}</td>
                     <td>

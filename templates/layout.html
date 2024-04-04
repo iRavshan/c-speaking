@@ -30,6 +30,7 @@
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <ul class="navbar-nav navbar-nav-right">
+          {% if user.is_authenticated %}
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
               <img src="{% static '/images/user.png' %}" alt="profile"/>
@@ -51,6 +52,11 @@
               </a>
             </div>
           </li>
+          {% else %}
+          <li class="nav-item">
+            <a href="{% url 'login' %}" class="btn btn-primary">Sign In</a>
+          </li>
+          {% endif %}
         </ul>
       </div>
     </nav>
