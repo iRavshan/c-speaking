@@ -145,6 +145,7 @@ async function submit_answers() {
     formData.append('part', '1');
 
     const csrftoken = getCookie('csrftoken');
+    var submitButton = document.getElementById('submitButton');
 
     questions.forEach(function(question){
         formData.append('questions', question.id);
@@ -160,7 +161,9 @@ async function submit_answers() {
             'Content-type': 'multipart/form-data',
         });
 
-        window.open('/speaking/submitted/');
+        window.location.href = "/speaking/submitted/";
+        submitButton.innerHTML="Submitting ...";
+        submitButton.setAttribute("disabled", "");
 
     } catch (error) {
         console.error('Error while submitting answers:', error);
