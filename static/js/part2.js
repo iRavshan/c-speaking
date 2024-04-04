@@ -11,7 +11,7 @@ var questions = document.getElementsByName('question');
 var answers = document.getElementsByName('answer');
 let repetitions = 0;
 var timer = 0;
-const totalRepetitions = questions.length;
+const totalRepetitions = 1;
 let isPreparation = true;
 
 let mediaRecorder;
@@ -29,12 +29,12 @@ function playSignal(){
     signalAudio.play();
 }
 
-function playQuestion(id){
+function playQuestion(){
     if ('speechSynthesis' in window) {
 
         const synthesis = window.speechSynthesis;
         
-        var textToSpeak = questions[id].innerText;
+        var textToSpeak = questions[0].innerText;
     
         var utterance = new SpeechSynthesisUtterance(textToSpeak);
 
@@ -44,9 +44,7 @@ function playQuestion(id){
 
         setTimer(1, 0);
 
-        if (id === 0){
-            timer = setInterval(updateCountdown, 1000);
-        }
+        timer = setInterval(updateCountdown, 1000);
     }
 
     else {
@@ -59,17 +57,17 @@ function playInfo(){
 
     infoAudio.onended = function() {
         hideInfo();
-        showQuestion(0);
-        playQuestion(0);
+        showQuestion();
+        playQuestion();
     };
 }
 
-function showQuestion(id){
-    questions[id].style.display = 'block';
+function showQuestion(){
+    questions[0].style.display = 'block';
 }
 
-function hideQuestion(id){
-    questions[id].style.display = 'none';
+function hideQuestion(){
+    questions[0].style.display = 'none';
 }
 
 function hideInfo(){
@@ -101,9 +99,7 @@ function updateCountdown() {
             }
             else{
                 stopRecording();
-                hideQuestion(repetitions-1);
-                showQuestion(repetitions);
-                playQuestion(repetitions);
+                playQuestion();
             }
     }
     else {

@@ -27,11 +27,9 @@
                     <h4 style="line-height: 1.6;">In this part, you will be given a situation. You will have one minute to think what to say. After preparation, you will have 
                       two minutes to answer. You will hear this sound when the time for preparation is over.</h4>
                   </div>            
-                  {% for question in questions %}
                   <h4 class="mb-3 mb-xl-0" style="line-height: 1.6; display: none;" name="question" id="{{question.id}}">
-                    <b>#{{forloop.counter}}.</b> {{question.title}}
+                    {{question.title}}
                   </h4>
-                  {% endfor %}
                 </div>
               </div>
             </div>
