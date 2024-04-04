@@ -95,7 +95,7 @@ def save_answers(request):
             qa_pair = QAPair(answer_id=new_id, question=question, attempt=attempt)
             qa_pair.save()
 
-    return redirect('submitted')
+    return render(request, 'speaking/submitted.html')
     
 def submitted(request):
     return render(request, 'speaking/submitted.html')
