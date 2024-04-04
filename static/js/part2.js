@@ -1,22 +1,23 @@
 let startingMinutes = 0;
 let startingSeconds = 0;
-let time = 0;
+let time = startingMinutes * 60 + startingSeconds;
 const countdownEl = document.getElementById('timer');
 const signalAudio = document.getElementById('signalAudio');
-var questionAudio = document.getElementById('questionAudio');
 const infoAudio = document.getElementById('infoAudio');
 const practicePanel = document.getElementById('practice-panel');
 const resultPanel = document.getElementById('result-panel');
 const infoText = document.getElementById('infoText');
-var question = document.getElementById('question');
+var questions = document.getElementsByName('question');
 var answers = document.getElementsByName('answer');
 let repetitions = 0;
-const totalRepetitions = 1;
+var timer = 0;
+const totalRepetitions = questions.length;
 let isPreparation = true;
-const timer = 0;
 
 let mediaRecorder;
 let audioChunks = [];
+let audioBlobs = [];
+const formData = new FormData();
 
 function setTimer(minutes, seconds){
     startingMinutes = minutes;
@@ -28,13 +29,28 @@ function playSignal(){
     signalAudio.play();
 }
 
-function playQuestion(){
-    questionAudio.play();
+function playQuestion(id){
+    if ('speechSynthesis' in window) {
+
+        const synthesis = window.speechSynthesis;
+        
+        var textToSpeak = questions[id].innerText;
     
-    questionAudio.onended = function() {
+        var utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+        synthesis.speak(utterance);
+
         isPreparation = true;
+
         setTimer(1, 0);
-        timer = setInterval(updateCountdown, 1000)
+
+        if (id === 0){
+            timer = setInterval(updateCountdown, 1000);
+        }
+    }
+
+    else {
+        alert('Please use a modern browser.');
     }
 }
 
@@ -42,14 +58,22 @@ function playInfo(){
     infoAudio.play();
 
     infoAudio.onended = function() {
-        infoText.style.display = 'none';
-        showQuestion();
-        playQuestion();
+        hideInfo();
+        showQuestion(0);
+        playQuestion(0);
     };
 }
 
-function showQuestion(){
-    question.style.display = 'block';
+function showQuestion(id){
+    questions[id].style.display = 'block';
+}
+
+function hideQuestion(id){
+    questions[id].style.display = 'none';
+}
+
+function hideInfo(){
+    infoText.style.display = 'none';
 }
 
 playInfo();
@@ -61,7 +85,7 @@ function updateCountdown() {
     seconds = seconds < 10 ? '0' + seconds: seconds;
     countdownEl.innerHTML = `${minutes}:${seconds}`;
 
-    if (time == 0){
+    if (time === 0) {
         if(totalRepetitions === repetitions){
             clearInterval(timer);
             stopRecording();
@@ -77,11 +101,12 @@ function updateCountdown() {
             }
             else{
                 stopRecording();
-                setTimer(0, 0);
-                isPreparation = true;
+                hideQuestion(repetitions-1);
+                showQuestion(repetitions);
+                playQuestion(repetitions);
             }
     }
-    else{
+    else {
         time--;        
     }
 }
@@ -101,6 +126,10 @@ async function startRecording() {
         const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
         const audioUrl = URL.createObjectURL(audioBlob);
         answers[repetitions-1].src = audioUrl;
+        audioBlobs.push(audioBlob);
+
+        formData.append('answers', audioBlob);
+
         audioChunks = [];
     };
 
@@ -109,4 +138,51 @@ async function startRecording() {
 
 function stopRecording() {
     mediaRecorder.stop();
+}
+
+async function submit_answers() {
+
+    formData.append('part', '2');
+
+    const csrftoken = getCookie('csrftoken');
+    var submitButton = document.getElementById('submitButton');
+
+    questions.forEach(function(question){
+        formData.append('questions', question.id);
+    });
+
+    submitButton.innerHTML="Submitting ...";
+    submitButton.setAttribute("disabled", "");
+
+    try {
+        await fetch('/speaking/save_answers/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            body: formData,
+            'Content-type': 'multipart/form-data',
+        });
+
+        window.location.href = "/speaking/submitted/";
+
+    } catch (error) {
+        console.error('Error while submitting answers:', error);
+    }
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Extract CSRF token
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }

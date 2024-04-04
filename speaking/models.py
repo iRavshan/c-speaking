@@ -23,8 +23,8 @@ class Topic(models.Model):
 
 class Question(models.Model):
     id = models.UUIDField(primary_key=True, null=False, default=uuid.uuid4, editable=False, auto_created=True)
-    title = models.CharField('title', max_length=200, unique=True)
-    topic = models.ForeignKey(Topic, null=True, on_delete=models.SET_NULL)
+    title = models.TextField('title', max_length=500, null=False, unique=True)
+    topic = models.ForeignKey(Topic, null=True, blank=True, on_delete=models.SET_NULL)
     part = models.CharField(max_length=20, choices=PARTS, default='1', null=False)
 
     class Meta:

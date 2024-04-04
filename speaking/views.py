@@ -38,9 +38,9 @@ def Part1(request):
 @login_required
 @user_access
 def Part2(request):
-    question = Question.objects.get(id=9)
+    random_question = Question.objects.filter(part='2').order_by('?').first()
     context = {
-        'question': question,
+        'question': random_question,
     }
     return render(request, 'speaking/part2/part2.html', context)
 
