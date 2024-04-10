@@ -72,9 +72,6 @@ def save_answers(request):
         question_ids = request.POST.getlist('questions')
         answers = request.FILES.getlist('answers')
         
-        print(part)
-        print(question_ids)
-        
         attempt = Attempt(user=request.user, part=part, finished_at=timezone.now())
         attempt.save()
 
